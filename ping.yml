@@ -1,0 +1,8 @@
+---
+
+- name: ping
+  hosts: group_wordpress
+  become: yes
+  tasks:
+    - name: ping  guerie_serv
+      ping:

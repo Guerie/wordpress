@@ -1,0 +1,4 @@
+guerie_serv ansible_hosts=10.5.169.234 ansible_user=root
+
+[group_wordpress]
+guerie_serv
