@@ -7,7 +7,7 @@
     - name: ping_guerie_serv
       ping:
 
-# PHP
-- name: Add the ondrej PHP PPA
-  apt_repository:
-    repo: 'ppa:ondrej/php'
+    # PHP
+    - name: Add the ondrej PHP PPA
+      apt_repository:
+        repo: 'ppa:ondrej/php'
