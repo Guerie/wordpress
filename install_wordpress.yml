@@ -36,7 +36,7 @@
         - python-mysqldb
 
     - name: Generate new root password
-      command: openssl rand -hex7
+      command: openssl rand -hex 7
       args:
         creates: /root/.my.conf
       register: mysql_new_root_pass
@@ -45,28 +45,48 @@
       mysql_user:
         name: ""
         state: absent
+      when: mysql_new_root_pass.changed
 
     - name: remove test database
       mysql_db:
         name: test
         state: absent
+      when: mysql_new_root_pass.changed
 
     - name: Output new root password
       debug:
-        msg: "New root password is {{ mysql_new_root_pass }}"
+        msg: "New root password is {{ mysql_new_root_pass.stdout }}"
+      when: mysql_new_root_pass.changed
 
     - name: Update root password
       mysql_user:
         name: root
         host: "{{ item }}"
-        password: "{{ mysql_new_root_pass }}"
+        password: "{{ mysql_new_root_pass.stdout }}"
       loop:
         - "{{ ansible_hostname }}"
         - 127.0.0.1
         - ::1
         - localhost
+      when: mysql_new_root_pass.changed
 
     - name: Create my.cnf
       template:
-        src: my.cnf.j2
+        src: templates/mysql/my.cnf.j2
         dest: /root/.my.cnf
+
+    #Nginx
+    - name: install Nginx
+      package:
+        name: nginx
+        state: present
+
+    - name: start Nginx
+      service:
+        name: nginx
+        state: started
+
+    - name: create nginx config
+      template:
+        src: templates/nginx/default.j2
+        dest: /etc/nginx/sites-available/default

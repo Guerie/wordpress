@@ -1,6 +1,3 @@
----
-
-- name: Create my.cnf
-  template:
-    src: my.cnf.j2
-    dest: /root/.my.cnf
+[client]
+user=root
+password={{ mysql_new_root_pass.stdout }}
