@@ -75,6 +75,8 @@
       template:
         src: templates/mysql/my.cnf.j2
         dest: /root/.my.cnf
+      when: mysql_new_root_pass.changed
+      notify: restart mysql
 
     #Nginx
     - name: install Nginx
@@ -98,3 +100,4 @@
       template:
         src: templates/nginx/default.j2
         dest: /etc/nginx/sites-available/default
+      notify: restart nginx
