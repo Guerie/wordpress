@@ -7,6 +7,13 @@
     - name: ping_guerie_serv
       ping:
 
+# TOOLS
+    - name: Install required tools
+      apt:
+        name:
+          - unzip
+        state: present
+
     # PHP
     - name: Add the ondrej PHP PPA
       apt_repository:
