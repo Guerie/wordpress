@@ -150,6 +150,10 @@
       register: db_exist
       ignore_errors: true
 
+    - name: Display db_exist
+      debug:
+        var: db_exist
+
     - name: Copy WordPress DB
       copy:
         src: files/wp-database.sql
