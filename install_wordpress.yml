@@ -36,6 +36,12 @@
         - mysql-server
         - python-mysqldb
 
+    - name: Create mysqld.cnf
+      template:
+        src: templates/mysql/mysqld.cnf.j2
+        dest: /etc/mysql/mysql.conf.d/mysqld.cnf
+      notify: restart mysql
+
     - name: Generate new root password
       command: openssl rand -hex 7
       args:
@@ -75,8 +81,6 @@
       template:
         src: templates/mysql/my.cnf.j2
         dest: /root/.my.cnf
-      when: mysql_new_root_pass.changed
-      notify: restart mysql
 
     #Nginx
     - name: install Nginx
@@ -88,6 +92,7 @@
       service:
         name: nginx
         state: started
+        enabled: yes
 
     - name: Check PHP version
       command: php --version
@@ -101,3 +106,15 @@
         src: templates/nginx/default.j2
         dest: /etc/nginx/sites-available/default
       notify: restart nginx
+
+  handlers:
+    - name: restart nginx
+      service:
+        name: nginx
+        state: restarted
+
+  handlers:
+    - name: restart mysql
+      service:
+        name: mysql
+        state: restarted
