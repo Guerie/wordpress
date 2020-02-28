@@ -1,4 +1,4 @@
-MachineCible ansible_host=192.168.56.102 ansible_user=root
+MachineCible ansible_host=192.168.56.102 ansible_user=devops
 
 [group_wordpress]
 MachineCible
